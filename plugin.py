@@ -20,7 +20,7 @@ class plugRoutine:
                 home.setProperty('sf_here','all')
                 vw.cATEgory(self.params['directory'])
             elif self.params.get('directory')=='files':
-                text(self.params)
+                #text(self.params)
                 vw.iteMList(self.params['item'],self.category)
             elif self.params.get('action')=='play':
                 pl.plaYVideo(self.params['video'])
