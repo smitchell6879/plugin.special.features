@@ -213,27 +213,18 @@ class Views:
                 self.t = self.item['title']
                 self.p = self.item['plot']
                 self.st = self.item['sorttitle']
-                self.fa = self.item['fanart']
-                self.pa = self.item['poster']
-                self.ta = self.item['thumb']
-                if self.fa == None:
-                	self.fa = self.item['art'].get('fanart')
-                if self.pa == None:
-                	self.pa = self.item['art'].get('poster')
-                if self.ta == None:
-                	self.ta = self.item['art'].get('thumb')
                 if os.path.splitext(self.f)[1] == '.bdmv':
-                    self.litem.setArt({'fanart':self.fa,'poster':self.pa})
+                    self.litem.setArt({'fanart':self.item['art'].get('fanart'),'poster':self.item['art'].get('poster')})
                 elif os.path.splitext(self.f)[1] == '.IFO':
-                    self.litem.setArt({'fanart':self.fa,'poster':self.pa})
+                    self.litem.setArt({'fanart':self.item['art'].get('fanart'),'poster':self.item['art'].get('poster')})
                 elif os.path.splitext(self.f)[1] == '.iso':
-                    self.litem.setArt({'fanart':self.fa,'poster':self.pa})
+                    self.litem.setArt({'fanart':self.item['art'].get('fanart'),'poster':self.item['art'].get('poster')})
                 else:
-                    self.litem.setArt({'fanart':self.fa,'thumb':self.ta, 'poster':self.item['poster']})
+                    self.litem.setArt({'fanart':self.item['art'].get('fanart'),'thumb':self.item['art'].get('thumb')})
                 self.litem.setCast(self.item['cast'])
                 self.litem.setInfo('video',{'title':self.t, 'plot': self.p,'path':self.f,'sorttitle':self.st})
                 self.is_folder  = False
-                self.litem.addContextMenuItems([(lang(30071), 'RunScript(plugin.video.specialfeatures,editinfo)',)])
+                self.litem.addContextMenuItems([('Manage...', 'RunScript(plugin.video.specialfeatures,editinfo)',)])
                 self.litem.setContentLookup(True) 
                 # xbmc.getCacheThumbName(self.f)
                 self.litem.setProperty('IsPlayable', 'true')
@@ -308,6 +299,7 @@ class Player:
         self.f = self.files[0].get('path')
         self.item_one = xbmcgui.ListItem(path=self.f)
         self.item_one.setInfo('video',{'title':self.files[0].get('title'),'plot':self.files[0].get('plot'),'sorttitle':self.files[0].get('sorttitle')})
+        info(self.files[0].get('art'))
         self.item_one.setCast(self.files[0].get('cast'))
         if os.path.splitext(self.f)[1] == '.bdmv':
             self.item_one.setArt({'fanart':self.files[0].get('art').get('fanart'),'poster':self.files[0].get('art').get('poster')})

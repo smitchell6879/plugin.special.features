@@ -1,16 +1,12 @@
 # XBMC Media Center language file
 # Addon Name: Special Features
-# Addon id: plugin.specialfeatures
+# Addon id: plugin.video.specialfeatures
 msgid ""
 msgstr ""
-
-####################################################
 
 msgctxt "#30000"
 msgid "Special Features"
 msgstr ""
-
-####################################################
 
 msgctxt "#30001"
 msgid "General"
@@ -23,8 +19,6 @@ msgstr "
 msgctxt "#30003"
 msgid "Database Settings"
 msgstr "
-
-####################################################
 
 msgctxt "#30010"
 msgid "Scan Library for Special Features"
@@ -54,8 +48,6 @@ msgctxt "#30016"
 msgid "Enable Context Menu"
 msgstr ""
 
-####################################################
-
 msgctxt "#30020"
 msgid "Database Name Sqlite/MySQL"
 msgstr ""
@@ -75,8 +67,6 @@ msgstr ""
 msgctxt "#30024"
 msgid "File types to ignore"
 msgstr ""
-
-####################################################
 
 msgctxt "#30030"
 msgid "Use MySQL centralized database"
@@ -98,8 +88,6 @@ msgctxt "#30034"
 msgid "Port"
 msgstr ""
 
-####################################################
-
 msgctxt "#30040"
 msgid "Directory Options"
 msgstr ""
@@ -115,8 +103,6 @@ msgstr ""
 msgctxt "#30043"
 msgid "[B]Changing these settings will result in having to rebuild your database[/B]"
 msgstr ""
-
-#####################################################
 
 msgctxt "#30050"
 msgid "Scanning Kodi Library"
@@ -182,44 +168,6 @@ msgctxt "#30065"
 msgid "Special Features Database Has Been Cleaned."
 msgstr ""
 
-#################################################
-
 msgctxt "#30070"
 msgid "Special Features"
-msgstr ""
-
-msgctxt "#30071"
-msgid "Manage..."
-msgstr ""
-
-msgctxt "#30072"
-msgid "Edit title"
-msgstr ""
-
-msgctxt "#30073"
-msgid "Edit sort title"
-msgstr ""
-
-msgctxt "#30074"
-msgid "Edit plot"
-msgstr ""
-
-msgctxt "#30075"
-msgid "Edit artwork"
-msgstr ""
-
-msgctxt "#30076"
-msgid "Poster"
-msgstr ""
-
-msgctxt "#30077"
-msgid "Fanart"
-msgstr ""
-
-msgctxt "#30078"
-msgid "Thumbnail"
-msgstr ""
-
-msgctxt "#30079"
-msgid "Reset artwork"
 msgstr ""

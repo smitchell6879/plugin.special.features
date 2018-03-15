@@ -21,20 +21,14 @@ class exPort:
 	  else:
 	    if level and (not elem.tail or not elem.tail.strip()):
 	      elem.tail = i
-	def buildTree(self,t,st,p,fa,pa,ta,f):
+	def buildTree(self,t,st,p,f):
 		self.header = ET.Element('specialfeatures')
 		self.title = ET.SubElement(self.header,'title')
 		self.title.text = '{}'.format(t)
 		self.sorttitle = ET.SubElement(self.header,'sorttitle')
 		self.sorttitle.text ='{}'.format(st)
 		self.plot = ET.SubElement(self.header,'plot')
-		self.plot.text = '{}'.format(p)
-		self.plot = ET.SubElement(self.header,'fanart')
-		self.plot.text = '{}'.format(fa)
-		self.plot = ET.SubElement(self.header,'poster')
-		self.plot.text = '{}'.format(pa)
-		self.plot = ET.SubElement(self.header,'thumb')
-		self.plot.text = '{}'.format(ta) 	 
+		self.plot.text = '{}'.format(p) 	 
 		self.indent(self.header)		 
 		self.sfnfo = ET.ElementTree(self.header)
 		self.sfnfo.write(f, xml_declaration=True, encoding='utf-8', method="xml")
@@ -52,9 +46,9 @@ class exPort:
 				bgdu(int(self.pct),lang(30000),"{0} {1}{2}{3}".format(lang(30064),self.cst,lang(30052),len(iterate)))
 				try:
 					if mysql == 'true':
-						self.buildTree(self.item['title'],self.item['sorttitle'],self.item['plot'],self.item['fanart'],self.item['poster'],self.item['thumb'],os.path.splitext(self.item['bpath'])[0]+'.sfnfo')
+						self.buildTree(self.item['title'],self.item['sorttitle'],self.item['plot'],os.path.splitext(self.item['bpath'])[0]+'.sfnfo')
 					else:
-						self.buildTree(self.item[1],self.item[3],self.item[4],self.item[5],self.item[6],self.item[7],os.path.splitext(self.item[2])[0]+'.sfnfo')
+						self.buildTree(self.item[1],self.item[3],self.item[4],os.path.splitext(self.item[2])[0]+'.sfnfo')
 
 				except:
 					error('Could not write to file directory, check your write permissions')
@@ -79,12 +73,9 @@ class exPort:
 class imPort:
 	def upDate(self,path):
 		if self.checkout(path) == 1:
-			try:
-				initTree(self.path)
-				self.vars()
-				return {'title':self.title, 'path':path, 'sorttitle':self.sorttitle,'plot':self.plot, 'fanart':self.fanart, 'poster':self.poster, 'thumb':self.thumb}
-			except:
-				error('Check .sfnfo Format')
+			initTree(self.path)
+			self.vars()
+			return {'title':self.title, 'path':path, 'sorttitle':self.sorttitle,'plot':self.plot}
 		else:
 			return None
 
@@ -92,9 +83,6 @@ class imPort:
 		self.title = root.find('title').text
 		self.sorttitle = root.find('sorttitle').text
 		self.plot = root.find('plot').text
-		self.fanart = root.find('fanart').text
-		self.poster = root.find('poster').text
-		self.thumb = root.find('thumb').text
 
 	def checkout(self,path):
 		self.path = os.path.splitext(path)[0]

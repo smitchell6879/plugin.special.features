@@ -3,8 +3,7 @@ standard_library.install_aliases()
 from builtins import str
 from builtins import object
 from lib.parse import *
-from lib.pymysql import *
-
+from pymysql import *
 import xml.etree.ElementTree as ET
 # from xml.dom import minidom
 import json
@@ -20,6 +19,8 @@ import xbmcvfs
 import xbmcgui
 import xbmcplugin
 import urllib
+import urllib2
+from hashlib import md5
 
 
 

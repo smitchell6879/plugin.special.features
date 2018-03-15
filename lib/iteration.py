@@ -252,7 +252,7 @@ class dbEnterExit:
             for self.bitem in self.item['bonus']:
                 self.entry = self.sql.exeCute('fw_special2',self.bitem['path'],'one')
                 if self.entry is None:
-                    self.input = (self.item['file'],self.bitem['title'],self.bitem['path'],self.bitem['sorttitle'],self.bitem.get('plot'),self.bitem.get('fanart'), self.bitem.get('poster'), self.bitem.get('thumb'))
+                    self.input = (self.item['file'],self.bitem['title'],self.bitem['path'],self.bitem['sorttitle'],self.bitem.get('plot'),self.bitem.get('thumb'))
                     self.sql.exeCute('in_special', self.input,'com')
                     # subprocess.call(['ffmpeg','-i',self.bitem['path'], '-ss', '00:00:00.000', '-vframes', '1', addir+self.bitem['title']+'.png'])
                     # self.thumb = resultFILTER().build_video_thumbnail_path(self.item['path'])
@@ -304,6 +304,8 @@ class dbEnterExit:
         except:
             info('No TV Shows') 
         self.range = len(self.chkList)
+        info(self.chkList) 
+        info(self.range) 
         self.entry = self.sql.exeCute('all_special','','all')
         for self.item in self.entry:
             if mysql == 'true':
@@ -505,7 +507,7 @@ class dbEnterExit:
                             self.cast.append(self.actor)
                         self.art.update({'thumb':self.item['thumb']})  
                         self.input = {'file':self.item['file'], 'title':self.item['title'], 'path':self.item['bpath'],'sorttitle':self.item['sorttitle'],
-                                      'plot':self.item['plot'], 'art':self.art, 'cast':self.cast, 'fanart':self.item['fanart'], 'poster':self.item['poster'],'thumb':self.item['thumb']
+                                      'plot':self.item['plot'], 'art':self.art, 'cast':self.cast
                                       }
                     else:
                         self.art = {}
@@ -525,7 +527,7 @@ class dbEnterExit:
                             self.cast.append(self.actor)
                         self.art.update({'thumb':self.item[5]}) 
                         self.input = {'file':self.item[0], 'title':self.item[1], 'path':self.item[2],'sorttitle':self.item[3],
-                                      'plot':self.item[4], 'art':self.art, 'cast':self.cast,'fanart':self.item[5], 'poster':self.item[6],'thumb':self.item[7]
+                                      'plot':self.item[4], 'art':self.art, 'cast':self.cast
                                       }
                     fliList.append(self.input)
             return fliList
@@ -534,15 +536,16 @@ class dbEnterExit:
                 self.entry = self.sql.exeCute('fw_special3',item,'allv')
                 for self.item in self.entry:
                     if mysql == 'true':
-                        self.result = {'file':self.item['file'],'title':self.item['title'],'path':self.item['bpath'],'sorttitle':self.item['sorttitle'], 'plot':self.item['plot'],'fanart':self.item['fanart'],'poster':self.item['poster'],'thumb':self.item['thumb']}
+                        self.result = {'file':self.item['file'],'title':self.item['title'],'path':self.item['bpath'],'sorttitle':self.item['sorttitle'], 'plot':self.item['plot']}
                     else:
-                        self.result = {'file':self.item[0],'title':self.item[1],'path':self.item[2],'sorttitle':self.item[3], 'plot':self.item[4], 'fanart':self.item[5], 'poster':self.item[6], 'thumb':self.item[7]}
-                    return self.result
+                        self.result = {'file':self.item[0],'title':self.item[1],'path':self.item[2],'sorttitle':self.item[3], 'plot':self.item[4]}
+                return self.result
             except:
                 error("Cant get result")
                 quit()
         elif category == 'smallup':
-            self.ivar = (item.get('title'),item.get('sorttitle'),item.get('plot'),item.get('fanart'),item.get('poster'),item.get('thumb'),item.get('file'),item.get('path'))
+            self.ivar = (item.get('title'),item.get('sorttitle'),item.get('plot'),item.get('file'),item.get('path'))
+            self.test = (item['path'],)
             self.sql.exeCute('up_special',self.ivar,'com')
         elif category == 'export':
             self.entry = self.sql.exeCute('all_special','','all')
@@ -584,46 +587,22 @@ class dbEnterExit:
 
     def get_url(self,**kwargs):
         return '{0}?{1}'.format("plugin://plugin.video.specialfeatures/",urlencode(kwargs))
-    def quckEditart(self):
-        self.artwork = dialog.contextmenu([lang(30076),lang(30077),lang(30078),lang(30079)])
-        if self.artwork == 0:
-            self.poster = dialog.browseSingle(2,lang(30000),'files')
-            self.quckEditart()
-        elif self.artwork == 1:
-            self.fanart = dialog.browseSingle(2,lang(30000),'files')
-            self.quckEditart()
-        elif self.artwork == 2:
-            self.thumb = dialog.browseSingle(2,lang(30000),'files')
-            self.quckEditart()
-        elif self.artwork == 3:
-            self.poster = None
-            self.fanart = None
-            self.thumb = None
-            return self.poster,self.fanart,self.thumb
-        else:
-            return self.poster,self.fanart,self.thumb
-
     def quckEdit(self):
         self.qvar=unquote(xbmc.getInfoLabel("Container.FolderPath")).split('=')[3],xbmc.getInfoLabel("Container().ListItem().Label")
         self.bonus = dbEnterExit().initDb('quikchk',self.qvar)
         self.title = self.bonus['title']
         self.sorttitle = self.bonus['sorttitle']
         self.plot = self.bonus['plot']
-        self.fanart = self.bonus['fanart']
-        self.poster = self.bonus['poster']
-        self.thumb = self.bonus['thumb']
-        self.choice = dialog.contextmenu([lang(30072),lang(30073),lang(30074),lang(30075)])
+        self.choice = dialog.contextmenu(['Edit title', 'Edit sort title', 'Edit plot'])
         if self.choice == 0:
             self.title = dialog.input(lang(30000), defaultt=self.bonus['title'], type=xbmcgui.INPUT_ALPHANUM)
         elif self.choice == 1:
             self.sorttitle = dialog.input(lang(30000), defaultt=self.bonus['sorttitle'], type=xbmcgui.INPUT_ALPHANUM)
         elif self.choice == 2:
             self.plot = dialog.input(lang(30000), defaultt=self.bonus['plot'], type=xbmcgui.INPUT_ALPHANUM)
-        elif self.choice == 3:
-            self.poster,self.fanart,self.thumb = self.quckEditart()
         elif self.choice == -1:
             quit()
-        self.update = {'file':self.bonus['file'],'title':self.title,'path':self.bonus['path'],'sorttitle':self.sorttitle,'plot':self.plot, 'poster':self.poster,'fanart':self.fanart,'thumb':self.thumb}
+        self.update = {'file':self.bonus['file'],'title':self.title,'path':self.bonus['path'],'sorttitle':self.sorttitle,'plot':self.plot}
         dbEnterExit().initDb('smallup',self.update)
         xbmc.executebuiltin('Container.Update({})'.format(xbmc.getInfoLabel('Container.FolderPath')))
         quit()
