@@ -48,26 +48,31 @@ addonid    = addon.getAddonInfo("id")
 addonpath  = addon.getAddonInfo("path")
 addir      = xbmc.translatePath(addon.getAddonInfo("profile"))
 adset      = xbmc.translatePath(os.path.join(addir,"settings.xml"))
-adtest      = xbmc.translatePath(os.path.join(addir,"testing.sfnfo"))
+adtest     = xbmc.translatePath(os.path.join(addir,"testing.sfnfo"))
 adtes      = xbmc.translatePath(os.path.join(addir,"movie.sfnfo"))
 dbdir      = xbmc.translatePath(os.path.join(addir,"{}.db".format(dbName)))
 libdir     = xbmc.translatePath(os.path.join(addonpath,'lib'))
 resdir     = xbmc.translatePath(os.path.join(addonpath,'resources'))
 sqldir     = xbmc.translatePath(os.path.join(libdir,'pymysql'))
+cachedir   = xbmc.translatePath(os.path.join(os.path.sep.join(dbdir.split(os.path.sep)[:-3]),'Thumbnails','plugin.video.specialfeatures'))
 
 sys.path.append(libdir)
 sys.path.append(resdir)
 sys.path.append(sqldir)
+sys.path.append(cachedir)
+
+if not xbmcvfs.exists(cachedir):
+    xbmcvfs.mkdir(cachedir)
 
 '''GUI'''
 home       = xbmcgui.Window(10000)
 dialpro    = xbmcgui.DialogProgress()
 dialbg     = xbmcgui.DialogProgressBG()
-dialog     = xbmcgui.Dialog()        
+dialog     = xbmcgui.Dialog()
 
 ''' Plugin'''
 urlhandle  = "plugin://plugin.video.specialfeatures/?"
-althandle  = "plugin://plugin.video.specialfeatures/" 
+althandle  = "plugin://plugin.video.specialfeatures/"
 
 '''XBMC'''
 monitor    = xbmc.Monitor()

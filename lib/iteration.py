@@ -80,9 +80,58 @@ class resultFILTER:
             # else:
             #     return
     def getthumb(self,file):
-        self.thumb = resultFILTER().build_video_thumbnail_path(file)
-        xbmc.getCacheThumbName(file)
-        return self.thumb
+        '''Check for existing thumbnail'''
+        validext = ['.jpg', '.jpeg', '.png']
+        thumb = None
+        thumbname = os.path.splitext(file)[0] + '-thumb'
+
+        for ext in validext:
+            if os.path.isfile(thumbname + ext):
+                thumb = thumbname + ext
+                break
+
+        if thumb == None:
+            try:
+                '''Try to generate on our own'''
+                import platform
+
+                '''Generate thumbnail hash'''
+                cachename = file.lower()
+                bytes = bytearray(cachename.encode())
+                crc = 0xffffffff
+                for b in bytes:
+                    crc = crc ^ (b << 24)
+                    for i in range(8):
+                        if (crc & 0x80000000 ):
+                            crc = (crc << 1) ^ 0x04C11DB7
+                        else:
+                            crc = crc << 1;
+                    crc = crc & 0xFFFFFFFF
+                thumb = '%08x' % crc + '.jpg'
+
+                '''Follow Kodi path standards'''
+                thumbdir = os.path.join(cachedir, thumb[0])
+
+                if not xbmcvfs.exists(thumbdir):
+                    xbmcvfs.mkdir(thumbdir)
+
+                thumb = os.path.join(thumbdir, thumb)
+
+                '''subprocess.call doesn't work correctly on Windows without shell=True'''
+                if platform.system() == 'Windows':
+                    subprocess.call(['ffmpeg', '-i', file, '-ss', '00:00:20', '-vframes', '1', thumb], shell=True)
+                else:
+                    subprocess.call(['ffmpeg', '-i', file, '-ss', '00:00:20', '-vframes', '1', thumb])
+            except subprocess.CalledProcessError as exc:
+                warning("Thumbnail generation error: " + exc.returncode)
+                warning(exc.output)
+                info("Thumbnail generation passed off to Kodi")
+
+                '''Fallback to Kodi generation just in case'''
+                thumb = resultFILTER().build_video_thumbnail_path(file)
+                xbmc.getCacheThumbName(file)
+
+        return thumb
     '''Getting Files'''
     def verifyFile(self,file,sp):
         self.dump = False
