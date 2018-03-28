@@ -80,13 +80,18 @@ class resultFILTER:
             # else:
             #     return
     def getthumb(self,file):
-        if os.path.isfile(file + '.png'):
-            '''Check for existing thumbnail'''
-            self.thumb = file + '.png'
-        else:
+        '''Check for existing thumbnail'''
+        self.validext = ['.jpg', '.jpeg', '.png']
+        self.thumb = None
+        for ext in self.validext:
+            if os.path.isfile(file + ext):
+                self.thumb = file + ext
+                break
+
+        if self.thumb == None:
             try:
                 '''Try to generate on our own'''
-                self.thumb = file + '.png'
+                self.thumb = file + '.jpg'
                 subprocess.call(['ffmpeg', '-i', file, '-ss', '00:00:20', '-vframes', '1', self.thumb])
             except subprocess.CalledProcessError as exc:
                 warning("Thumbnail generation error: " + exc.returncode)
