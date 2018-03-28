@@ -80,8 +80,23 @@ class resultFILTER:
             # else:
             #     return
     def getthumb(self,file):
-        self.thumb = resultFILTER().build_video_thumbnail_path(file)
-        xbmc.getCacheThumbName(file)
+        if os.path.isfile(file + '.png'):
+            '''Check for existing thumbnail'''
+            self.thumb = file + '.png'
+        else:
+            try:
+                '''Try to generate on our own'''
+                self.thumb = file + '.png'
+                subprocess.call(['ffmpeg', '-i', file, '-ss', '00:00:20', '-vframes', '1', self.thumb])
+            except subprocess.CalledProcessError as exc:
+                warning("Thumbnail generation error: " + exc.returncode)
+                warning(exc.output)
+                info("Thumbnail generation passed off to Kodi")
+
+                '''Fallback to Kodi generation just in case'''
+                self.thumb = resultFILTER().build_video_thumbnail_path(file)
+                xbmc.getCacheThumbName(file)
+
         return self.thumb
     '''Getting Files'''
     def verifyFile(self,file,sp):
